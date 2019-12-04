@@ -13,6 +13,7 @@ from compute_baselines import *
 from compute_gradients import *
 from actor_agent import ActorAgent
 from tf_logger import TFLogger
+from tqdm import tqdm 
 
 
 def invoke_model(actor_agent, obs, exp):
@@ -218,6 +219,7 @@ def main():
     # create result and model folder
     create_folder_if_not_exists(args.result_folder)
     create_folder_if_not_exists(args.model_folder)
+    print(args)
 
     # initialize communication queues
     params_queues = [mp.Queue(1) for _ in range(args.num_agents)]
@@ -268,7 +270,7 @@ def main():
     reset_prob = args.reset_prob
 
     # ---- start training process ----
-    for ep in range(1, args.num_ep):
+    for ep in tqdm(range(1, args.num_ep), total=args.num_ep-1):
         print('training epoch', ep)
 
         # synchronize the model parameters for each training agent

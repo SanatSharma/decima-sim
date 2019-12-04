@@ -93,12 +93,12 @@ class ActorAgent(Agent):
         # select node action probability
         self.selected_node_prob = tf.reduce_sum(tf.multiply(
             self.node_act_probs, self.node_act_vec),
-            reduction_indices=1, keep_dims=True)
+            reduction_indices=1, keepdims=True)
 
         # select job action probability
         self.selected_job_prob = tf.reduce_sum(tf.reduce_sum(tf.multiply(
             self.job_act_probs, self.job_act_vec),
-            reduction_indices=2), reduction_indices=1, keep_dims=True)
+            reduction_indices=2), reduction_indices=1, keepdims=True)
 
         # actor loss due to advantge (negated)
         self.adv_loss = tf.reduce_sum(tf.multiply(
@@ -222,7 +222,7 @@ class ActorAgent(Agent):
             node_outputs = node_outputs + node_valid_mask
 
             # do masked softmax over nodes on the graph
-            node_outputs = tf.nn.softmax(node_outputs, dim=-1)
+            node_outputs = tf.nn.softmax(node_outputs, axis=-1)
 
             # -- part B, the distribution over executor limits --
             merge_job = tf.concat([
@@ -253,7 +253,7 @@ class ActorAgent(Agent):
                 job_outputs, [batch_size, -1, len(self.executor_levels)])
 
             # do masked softmax over jobs
-            job_outputs = tf.nn.softmax(job_outputs, dim=-1)
+            job_outputs = tf.nn.softmax(job_outputs, axis=-1)
 
             return node_outputs, job_outputs
 
@@ -350,7 +350,7 @@ class ActorAgent(Agent):
 
         # sort out the exec_map
         exec_map = {}
-        for job_dag in job_dags:
+        for job_dag in job_dags:;
             exec_map[job_dag] = len(job_dag.executors)
         # count in moving executors
         for node in moving_executors.moving_executors.values():
