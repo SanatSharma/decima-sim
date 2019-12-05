@@ -23,9 +23,11 @@ class TFLogger(object):
     def write_dict_log(self, val):
         file = args.result_folder + args.model_folder + strftime("%Y-%m-%d", gmtime())
         row = dict(zip(self.var_list,val))
-        with open(file, "a", newline="") as fd:
-            writer = csv.DictWriter(fd, fieldnames=self.var_list)
-            writer.write(row)
+        with open(file, "a", newline="") as f:
+            for i in range(len(self.var_list)):
+                f.write("%s,%s\n"%(self.var_list[i],val[i]))
+
+            f.write("\n")
 
     def log(self, ep, values):
         assert len(self.summary_vars) == len(values)
